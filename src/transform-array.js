@@ -17,6 +17,7 @@ module.exports = function transform(arr) {
           if(i== arr.length-1){continue}
           array.push(arr[i+1]);
        }else if (el==='--double-prev'){
+        if(arr[i-2]==='--discard-next') continue;
           if(i == 0){continue}
           array.push(arr[i-1]);
       }else{
