@@ -1,32 +1,26 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function transform(arr) {
-  const array = new Array()
-  if (Array.isArray(arr)){
-    if (arr.length==0){ return arr};
-    for (let i=0; i<arr.length; i++){
-      let el=arr[i];
-       if(el==='--discard-next'){
-          if(i== arr.length-1) continue;
-          if(arr[i+2]==='--discard-prev') continue;
-          i+=2;
-       }else if (el==='--discard-prev'){
-          if(i == 0) {continue}
-          array.pop(arr[i-1]);
-      }else if (el==='--double-next'){
-          if(i== arr.length-1){continue}
-          array.push(arr[i+1]);
-       }else if (el==='--double-prev'){
-        if(arr[i-2]==='--discard-next') continue;
-          if(i == 0){continue}
-          array.push(arr[i-1]);
-      }else{
-        array.push(el);
+  let newArr=[];
+  if (Array.isArray(arr)) {
+    for (i=0; i<arr.length; i++) {
+      if (arr[i]=='--discard-next') {
+        if(arr[i + 2] === '--double-prev' || arr[i + 2] === '--discard-prev') {
+          i += 2;
+        } else i++;
       }
+      else if(arr[i]=='--discard-prev') {
+        if (i!=0) {newArr.pop()}
+      }
+      else if(arr[i]=='--double-next') {
+        if (i!=arr.length-1) {newArr.push(arr[i+1])}
+      }
+      else if(arr[i]=='--double-prev') {
+        if (i!=0) {newArr.push(arr[i-1])}
+      }
+      else newArr.push(arr[i])
     }
-
-  return array;
-  }else {
-    throw new Error('THROWN');
+    return newArr
   }
+  else throw new Error('Error')
 };
